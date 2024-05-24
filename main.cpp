@@ -70,12 +70,12 @@ pair<int, double> testAlgorithmPreflowPush(const string& filename) {
     return make_pair(maxFlow, duration.count());
 }
 int main() {
-    string input_folder_path = "D:/graph/t1/graph theory/Mitrofanova_GraphTheory2023-2024/defaul_tests"; //путь к папке с тестами
+    string input_folder_path = "D:/graph/womens/womens/MaxFlowtests"; //путь к папке с тестами
 
     while (true) {
         int algorithmChoice, testPackage;
 
-        cout << "Which algorithm do you want to use?\n1. Edmonds-Karp\n2. Preflow\n3. Exit\n4. Tests both on random graphs";
+        cout << "\nWhich algorithm do you want to use?\n1. Edmonds-Karp\n2. Preflow\n3. Exit\n4. Tests both on random graphs\n";
         cin >> algorithmChoice;
         if (algorithmChoice == 3) {
             break;
@@ -86,26 +86,59 @@ int main() {
         }
         vector<string> filenames;
         if (algorithmChoice == 4) {
-            input_folder_path = "D:/graph/t1/graph theory/Mitrofanova_GraphTheory2023-2024/graph_tests";
+            input_folder_path = "D:/women/testgraph/graph_tests";
             for (int i = 1; i <= 50; ++i) {
                 filenames.push_back(input_folder_path + "/test" + to_string(i) + ".txt");
             }
-            cout << "Test\tMax Flow ed-carp\tTime (ms)" << endl;
+
+            cout << "\nThe Edmons-Karp algorithm\n";
+            cout << "Test\tVertex\tEdges\tMax Flow\tTime (ms)" << endl;
+            //cout << "Test\tMax Flow ed-carp\tTime (ms)" << endl;
+
             for (size_t i = 0; i < filenames.size(); ++i) {
+                ifstream infile(filenames[i]);
+                if (!infile.is_open()) {
+                    cerr << "Unable to open file: " << filenames[i] << endl;
+                    return -1;
+                }
+                int ver, edges;
+                infile >> ver >> edges;
+                infile.close();
+
                 auto result = testAlgorithmEdmondsKarp(filenames[i]);
-                cout << (i + 1) << "\t" << result.first << "\t\t\t" << result.second << endl;
+                //cout << (i + 1) << "\t" << result.first << "\t\t\t" << result.second << endl;
+                cout << (i + 1) << "\t" << ver << "\t" << edges << "\t" << result.first << "\t\t\t" << result.second << endl;
+
             }
-            cout << "Test\tMax Flow predpotok\tTime (ms)" << endl;
+            //cout << "Test\tMax Flow predpotok\tTime (ms)" << endl;
+            cout << "\nPre-flow push\n";
+            cout << "Test\tVertex\tEdges\tMax Flow\tTime (ms)" << endl;
             for (size_t i = 0; i < filenames.size(); ++i) {
+                ifstream infile(filenames[i]);
+                if (!infile.is_open()) {
+                    cerr << "Unable to open file: " << filenames[i] << endl;
+                    return -1;
+                }
+                int ver, edges;
+                infile >> ver >> edges;
+                infile.close();
                 auto result = testAlgorithmPreflowPush(filenames[i]);
-                cout << (i + 1) << "\t" << result.first << "\t\t\t" << result.second << endl;
+                //cout << (i + 1) << "\t" << result.first << "\t\t\t" << result.second << endl;
+                cout << (i + 1) << "\t" << ver << "\t" << edges << "\t" << result.first << "\t\t\t" << result.second << endl;
+
             }
 
             return 0;
         }
         // Выбор пакета тестов
-        cout << "Choose a test package (1, 2, 3, 4) or 5 to Exit: ";
-        cin >> testPackage;
+        if (algorithmChoice == 1) {
+            testPackage = 1;
+        }
+        else {
+            cout << "\nChoose a test package (1, 2, 3, 4) or 5 to Exit: ";
+            cin >> testPackage;
+        }
+        
         if (testPackage == 5) {
             break;
         }else if (testPackage < 1 || testPackage > 4) {
@@ -136,17 +169,35 @@ int main() {
 
         // Запуск тестов
         if (algorithmChoice == 1) {
-            cout << "Test\tMax Flow\tTime (ms)" << endl;
+            cout << "\nThe Edmons-Karp algorithm\n";
+            cout << "Test\tVertex\tEdges\tMax Flow\tTime (ms)" << endl;
             for (size_t i = 0; i < filenames.size(); ++i) {
+                ifstream infile(filenames[i]);
+                if (!infile.is_open()) {
+                    cerr << "Unable to open file: " << filenames[i] << endl;
+                    return -1;
+                }
+                int ver, edges;
+                infile >> ver>>edges; 
+                infile.close();
                 auto result = testAlgorithmEdmondsKarp(filenames[i]);
-                cout << (i + 1) << "\t" << result.first << "\t\t\t" << result.second << endl;
+                cout << (i + 1) << "\t" <<ver<<"\t" << edges<<"\t" << result.first << "\t\t\t" << result.second << endl;
             }
         }
         else if (algorithmChoice == 2) {
-            cout << "Test\tMax Flow\tTime (ms)" << endl;
+            cout << "\nPre-flow push\n";
+            cout << "Test\tVertex\tEdges\tMax Flow\tTime (ms)" << endl;
             for (size_t i = 0; i < filenames.size(); ++i) {
+                ifstream infile(filenames[i]);
+                if (!infile.is_open()) {
+                    cerr << "Unable to open file: " << filenames[i] << endl;
+                    return -1;
+                }
+                int ver, edges;
+                infile >> ver >> edges;
+                infile.close();
                 auto result = testAlgorithmPreflowPush(filenames[i]);
-                cout << (i + 1) << "\t" << result.first << "\t\t\t" << result.second << endl;
+                cout << (i + 1) << "\t" << ver << "\t" << edges << "\t" << result.first << "\t\t\t" << result.second << endl;
             }
         }
     }
