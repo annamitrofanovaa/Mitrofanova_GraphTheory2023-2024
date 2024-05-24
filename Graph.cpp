@@ -52,30 +52,16 @@ int Graph::edmondsKarp(int source, int sink) {
     return maxFlow;
 }
 
-
-/*void Graph::initializePreflow(int source) {
-    height.assign(V, 0);
-    excess.assign(V, 0);
-    height[source] = V;
-    for (int v = 0; v < V; ++v) {
-        if (residualGraph[source][v] > 0) {
-            excess[v] = residualGraph[source][v];
-            residualGraph[v][source] = residualGraph[source][v];
-            residualGraph[source][v] = 0;
-        }
-    }
-}*/
 void Graph::initializePreflow(int source) {
-    height.assign(V, 0); // Устанавливаем высоты всех вершин в 0
-    excess.assign(V, 0); // Устанавливаем избыточные потоки всех вершин в 0
-    height[source] = V; // Высота истока равна количеству вершин
+    height.assign(V, 0); 
+    excess.assign(V, 0); 
+    height[source] = V; 
 
     for (int v = 0; v < V; ++v) {
         if (residualGraph[source][v] > 0) {
             int capacity = residualGraph[source][v];
-            excess[v] = capacity; // Устанавливаем избыточный поток в вершине v
-            excess[source] -= capacity; // Уменьшаем избыточный поток в истоке
-            // Устанавливаем поток в направлении source -> v и v -> source
+            excess[v] = capacity; 
+            excess[source] -= capacity; 
             residualGraph[source][v] = 0;
             residualGraph[v][source] = capacity;
         }
@@ -90,19 +76,11 @@ void Graph::push(int u, int v) {
     excess[v] += send;
 }
 
-/*void Graph::relabel(int u) {
-    int min_height = INT_MAX;
-    for (int v = 0; v < V; ++v) {
-        if (residualGraph[u][v] > 0) {
-            min_height = std::min(min_height, height[v]);
-            height[u] = min_height + 1;
-        }
-    }
-}*/
+
 void Graph::relabel(int u) {
     int min_height = INT_MAX;
     for (int v = 0; v < V; ++v) {
-        if (residualGraph[u][v] > 0) {  // Only consider vertices connected by residual capacity
+        if (residualGraph[u][v] > 0) {  
             min_height = std::min(min_height, height[v]);
             height[u] = min_height + 1;
         }
@@ -127,25 +105,6 @@ void Graph::discharge(int u) {
     }
 }
 
-/*void Graph::globalRelabel(int source, int sink) {
-    std::fill(height.begin(), height.end(), V);
-    std::fill(excess.begin(), excess.end(), 0);
-    std::queue<int> q;
-    q.push(sink);
-    height[sink] = 0;
-
-    while (!q.empty()) {
-        int u = q.front();
-        q.pop();
-
-        for (int v = 0; v < V; ++v) {
-            if (residualGraph[v][u] > 0 && height[v] == V) {
-                height[v] = height[u] + 1;
-                q.push(v);
-            }
-        }
-    }
-}*/
 void Graph::globalRelabel(int source, int sink) {
     height.assign(V, V);
     height[sink] = 0;
@@ -165,36 +124,6 @@ void Graph::globalRelabel(int source, int sink) {
 }
 
 
-/*int Graph::getMaxFlow(int source, int sink) {
-    initializePreflow(source);
-
-    std::vector<int> activeVertices;
-    for (int i = 0; i < V; ++i) {
-        if (i != source && i != sink && excess[i] > 0) {
-            activeVertices.push_back(i);
-        }
-    }
-
-    int count = 0;
-    while (!activeVertices.empty()) {
-        int u = activeVertices.back();
-        activeVertices.pop_back();
-        int old_height = height[u];
-        discharge(u);
-        if (height[u] > old_height) {
-            activeVertices.push_back(u);
-        }
-
-        if (++count == V) {
-            count = 0;
-            globalRelabel(source, sink);
-        }
-    }
-
-    return excess[sink];
-}
-
-*/
 int Graph::getHighestExcessVertex() {
     int source = 0;
     int sink = V - 1;
@@ -206,27 +135,7 @@ int Graph::getHighestExcessVertex() {
     }
     return highestExcessVertex;
 }
-/*int Graph::getMaxFlow(int source, int sink) {
-    initializePreflow(source);
-    std::vector<int> activeVertices;
-    for (int i = 0; i < V; ++i) {
-        if (i != source && i != sink && excess[i] > 0) {
-            activeVertices.push_back(i);
-        }
-    }
-    while (!activeVertices.empty()) {
-        int u = activeVertices.back();
-        activeVertices.pop_back();
-        int old_height = height[u];
-        discharge(u);
-        if (height[u] > old_height) {
-            activeVertices.push_back(u);
-        }
-     
-    }
-    return excess[sink];
-}
-*/
+
 int Graph::getMaxFlow(int source, int sink) {
     initializePreflow(source);
     int highestExcessVertex = getHighestExcessVertex();
