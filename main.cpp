@@ -94,21 +94,22 @@ int main() {
             cout << "\nThe Edmons-Karp algorithm\n";
             cout << "Test\tVertex\tEdges\tMax Flow\tTime (ms)" << endl;
             //cout << "Test\tMax Flow ed-carp\tTime (ms)" << endl;
-
+            ofstream outfile("results.txt");
+            ifstream infile(filenames[0]);
+            if (!infile.is_open()) {
+                cerr << "Unable to open file: " << filenames[0] << endl;
+                return -1;
+            }
+            int ver, edges;
+            infile >> ver >> edges;
+            infile.close();
+            outfile << ver << "\n" << edges << "\n";
             for (size_t i = 0; i < filenames.size(); ++i) {
-                ifstream infile(filenames[i]);
-                if (!infile.is_open()) {
-                    cerr << "Unable to open file: " << filenames[i] << endl;
-                    return -1;
-                }
-                int ver, edges;
-                infile >> ver >> edges;
-                infile.close();
-
                 auto result = testAlgorithmEdmondsKarp(filenames[i]);
                 //cout << (i + 1) << "\t" << result.first << "\t\t\t" << result.second << endl;
                 cout << (i + 1) << "\t" << ver << "\t" << edges << "\t" << result.first << "\t\t\t" << result.second << endl;
 
+                outfile << result.second << "\n";
             }
             //cout << "Test\tMax Flow predpotok\tTime (ms)" << endl;
             cout << "\nPre-flow push\n";
@@ -125,7 +126,7 @@ int main() {
                 auto result = testAlgorithmPreflowPush(filenames[i]);
                 //cout << (i + 1) << "\t" << result.first << "\t\t\t" << result.second << endl;
                 cout << (i + 1) << "\t" << ver << "\t" << edges << "\t" << result.first << "\t\t\t" << result.second << endl;
-
+                outfile << result.second << "\n";
             }
 
             return 0;
