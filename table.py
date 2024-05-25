@@ -6,8 +6,8 @@ with open(file_path, 'r') as file:
 
 num_vertices = int(lines[0].strip())
 num_edges = int(lines[1].strip())
-edmonds_karp_times = [int(lines[i].strip()) for i in range(2, 52)]
-push_relabel_times = [int(lines[i].strip()) for i in range(52, 102)]
+edmonds_karp_times = [int(lines[i].strip()) for i in range(1, 51)]
+push_relabel_times = [int(lines[i].strip()) for i in range(51, 100)]
 
 avg_edmonds_karp_time = sum(edmonds_karp_times) / len(edmonds_karp_times)
 avg_push_relabel_time = sum(push_relabel_times) / len(push_relabel_times)
